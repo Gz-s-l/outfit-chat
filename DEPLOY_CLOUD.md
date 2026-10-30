@@ -147,8 +147,7 @@ ufw allow 22,80,443,8081/tcp
 
 ## 六、拉代码
 
-仓库地址：本项目已是独立仓库（推送后在 GitHub 新建，地址形如
-`https://github.com/Gz-s-l/outfit-chat.git`，**把下面命令里的地址换成你实际的**）。
+仓库地址：`https://github.com/Gz-s-l/outfit-chat.git`（独立仓库，master 分支）
 
 ```bash
 mkdir -p /opt && cd /opt
