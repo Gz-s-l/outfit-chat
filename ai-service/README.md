@@ -213,7 +213,7 @@ curl -X POST "http://127.0.0.1:8000/api/knowledge/bootstrap?force=true"
 ## 六、本地跑通
 
 ```bash
-cd D:\Vscode\rag\outfit-chat\ai-service
+cd D:\Vscode\outfit-chat\ai-service
 # Git Bash: export CHAT_MODEL_NAME=qwen-max
 set CHAT_MODEL_NAME=qwen-max
 uvicorn main:app --host 0.0.0.0 --port 8000 --reload

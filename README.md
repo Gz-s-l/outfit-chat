@@ -1,6 +1,6 @@
 # 平价穿搭 AI 顾问 · 前后端分离版
 
-从原 Streamlit 单机项目（仓库根目录）重构而来，业务上改造为**平价日常穿搭顾问**（面向全体人群，重点服务校园学生场景）。
+从原 Streamlit 单机项目重构而来（旧项目仍在另一个仓库 `rag-project`，与本项目互不依赖），业务上改造为**平价日常穿搭顾问**（面向全体人群，重点服务校园学生场景）。
 
 ```
 浏览器
@@ -22,7 +22,7 @@ SpringBoot 是唯一的数据出口：前端只跟它打交道，AI 服务不认
 ## 一、目录结构
 
 ```
-outfit-chat/
+outfit-chat/（本仓库根）
 ├── ai-service/              # 模块一：FastAPI AI 服务
 │   ├── main.py              # 应用入口、CORS、/health
 │   ├── api_chat.py          # SSE 流式对话 + 历史查询/清空
@@ -82,7 +82,7 @@ outfit-chat/
 
 ```bash
 # ① AI 服务（:8000）
-cd outfit-chat/ai-service
+cd ai-service
 pip install -r requirements.txt         # 首次
 uvicorn main:app --port 8000 --reload
 # 当前账号 qwen3-max 不可用，如遇 Model not exist：
@@ -90,13 +90,13 @@ uvicorn main:app --port 8000 --reload
 #   Git Bash   : export CHAT_MODEL_NAME=qwen-max
 
 # ② 主后端（:8080）
-cd outfit-chat/backend
+cd backend
 mvn package -DskipTests                 # 首次
 java -jar target/chat-backend-1.0.0.jar --server.port=8080
 # 注意：本机若有 SERVER__PORT 环境变量会被 Spring 抢走，必须显式带 --server.port
 
 # ③ 前端（:5173）
-cd outfit-chat/frontend
+cd frontend
 npm install                             # 首次
 npm run dev
 ```

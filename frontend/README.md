@@ -37,7 +37,7 @@ frontend/
 # 1. 先启动 FastAPI(8000) 和 SpringBoot(8080)（见各模块 README）
 
 # 2. 启动前端
-cd D:\Vscode\rag\outfit-chat\frontend
+cd D:\Vscode\outfit-chat\frontend
 npm install        # 首次
 npm run dev        # 打开 http://localhost:5173
 ```

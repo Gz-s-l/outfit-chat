@@ -10,41 +10,38 @@
 
 ## 一、目录结构与交付物
 
-新架构全部收在仓库的 `outfit-chat/` 目录下，与原 Streamlit 单机版（仓库根目录的 `app_qa.py`、`rag.py`、`chroma_db/` 等）互不干扰，可各自独立运行。
+本项目为**独立仓库**，仓库根目录即为项目根，与旧 Streamlit 单机版（另一个仓库 `rag-project`）完全解耦，互不依赖。
 
 ```
-仓库根\
-├── app_qa.py / app_file_uploader.py / rag.py …   # 原 Streamlit 单机版（未改动，仍可运行）
-├── chroma_db\ / md5.txt                          # 原单机版向量库
-└── outfit-chat\                                  # ★ 本次重构的前后端分离版本
-    ├── docker-compose.yml        # 一键编排（4 个常驻服务 + 可选 caddy + 4 个数据卷 + 1 个网络）
-    ├── Caddyfile                 # 可选：域名 HTTPS 入口（--profile https 启用，自动证书）
-    ├── init.sql                  # MySQL 初始化：建库 + chat_message 表
-    ├── .env.example              # 环境变量模板（复制为 .env 填值）
-    ├── README.md                 # 新架构总览与本地启动
-    ├── DEPLOY.md                 # 本文档（部署细节与排错）
-    ├── DEPLOY_CLOUD.md           # 云服务器从零上线指南（选购 / 初始化 / HTTPS）
-    │
-    ├── ai-service\               # 模块一：FastAPI RAG 流式 AI 服务
-    │   ├── Dockerfile            # python:3.12-slim，内置健康检查
-    │   ├── .dockerignore         # 已排除 venv、密钥与本地向量库
-    │   ├── corpus\               # 14 篇精选穿搭语料（随镜像打包，启动自动入库）
-    │   ├── system_prompt.py      # 穿搭顾问人设与回答规则
-    │   ├── kb_bootstrap.py       # 启动时自动建库（增量入库 + 联网采集）
-    │   └── requirements.txt
-    │
-    ├── backend\                  # 模块二：SpringBoot 主后端
-    │   ├── Dockerfile            # 多阶段：maven 编译 → jre-alpine 运行
-    │   ├── docker/maven-settings.xml   # 构建期阿里云镜像加速
-    │   ├── src/main/resources/schema.sql  # 应用启动自动建表（与 init.sql 同源）
-    │   └── pom.xml
-    │
-    └── frontend\                 # 模块三：Vue3 前端
-        ├── Dockerfile            # 多阶段：node 构建 → nginx 托管
-        └── nginx.conf            # SPA 回退 + /api 反代（SSE 不缓冲的关键参数）
+outfit-chat\（本仓库根）
+├── docker-compose.yml        # 一键编排（4 个常驻服务 + 可选 caddy + 4 个数据卷 + 1 个网络）
+├── Caddyfile                 # 可选：域名 HTTPS 入口（--profile https 启用，自动证书）
+├── init.sql                  # MySQL 初始化：建库 + chat_message 表
+├── .env.example              # 环境变量模板（复制为 .env 填值）
+├── README.md                 # 新架构总览与本地启动
+├── DEPLOY.md                 # 本文档（部署细节与排错）
+├── DEPLOY_CLOUD.md           # 云服务器从零上线指南（选购 / 初始化 / HTTPS）
+│
+├── ai-service\               # 模块一：FastAPI RAG 流式 AI 服务
+│   ├── Dockerfile            # python:3.12-slim，内置健康检查
+│   ├── .dockerignore         # 已排除 venv、密钥与本地向量库
+│   ├── corpus\               # 14 篇精选穿搭语料（随镜像打包，启动自动入库）
+│   ├── system_prompt.py      # 穿搭顾问人设与回答规则
+│   ├── kb_bootstrap.py       # 启动时自动建库（增量入库 + 联网采集）
+│   └── requirements.txt
+│
+├── backend\                  # 模块二：SpringBoot 主后端
+│   ├── Dockerfile            # 多阶段：maven 编译 → jre-alpine 运行
+│   ├── docker/maven-settings.xml   # 构建期阿里云镜像加速
+│   ├── src/main/resources/schema.sql  # 应用启动自动建表（与 init.sql 同源）
+│   └── pom.xml
+│
+└── frontend\                 # 模块三：Vue3 前端
+    ├── Dockerfile            # 多阶段：node 构建 → nginx 托管
+    └── nginx.conf            # SPA 回退 + /api 反代（SSE 不缓冲的关键参数）
 ```
 
-> 所有 `docker compose` 命令都要**在 `outfit-chat/` 目录里执行**（compose 文件的相对路径 `./ai-service`、`./init.sql`、`./Caddyfile` 都相对它解析）。
+> 所有 `docker compose` 命令都要**在项目根目录（即本仓库根）里执行**（compose 文件的相对路径 `./ai-service`、`./init.sql`、`./Caddyfile` 都相对它解析）。
 
 ---
 
@@ -70,7 +67,7 @@ docker compose version
 ## 三、快速部署（三步）
 
 ```bash
-cd D:\Vscode\rag\outfit-chat        # 注意：一定要进到 outfit-chat 目录再执行
+cd D:\Vscode\outfit-chat        # 注意：一定要进到项目根目录（含 docker-compose.yml）再执行
 
 # 1. 配置环境变量
 copy .env.example .env          # Windows CMD

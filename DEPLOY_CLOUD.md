@@ -147,21 +147,22 @@ ufw allow 22,80,443,8081/tcp
 
 ## 六、拉代码
 
-仓库地址（你现有 remote）：`https://github.com/Gz-s-l/rag-project.git`
+仓库地址：本项目已是独立仓库（推送后在 GitHub 新建，地址形如
+`https://github.com/Gz-s-l/outfit-chat.git`，**把下面命令里的地址换成你实际的**）。
 
 ```bash
 mkdir -p /opt && cd /opt
-git clone https://github.com/Gz-s-l/rag-project.git outfit
-cd outfit/outfit-chat        # 新架构在仓库的 outfit-chat 子目录里
+git clone https://github.com/Gz-s-l/outfit-chat.git outfit
+cd outfit             # 仓库根即项目根，docker-compose.yml 就在这里
 ```
 
-> 仓库根目录还有原 Streamlit 单机版（`app_qa.py`、根级 `chroma_db/` 等），部署时不需要它们，
-> 忽略即可；所有 docker 命令都在 `outfit-chat/` 里执行。
+> 项目已与原 Streamlit 单机版（`rag-project` 仓库）彻底分离，服务器上**只需拉这一个仓库**，
+> 没有任何多余的旧代码需要忽略。
 
 **如果是私有仓库**，用 Personal Access Token 代替密码（GitHub 已不支持密码认证）：
 
 ```bash
-git clone https://<用户名>:<token>@github.com/Gz-s-l/rag-project.git outfit
+git clone https://<用户名>:<token>@github.com/Gz-s-l/outfit-chat.git outfit
 # token 在 GitHub → Settings → Developer settings → Personal access tokens 生成，勾 repo 权限
 ```
 
@@ -207,7 +208,7 @@ DOMAIN=chat.你的域名.com
 ## 八、阶段一：先用 IP 验证链路
 
 ```bash
-cd /opt/outfit/outfit-chat
+cd /opt/outfit
 docker compose up -d --build          # 首次构建 5~15 分钟，取决于网络
 docker compose ps                     # 四个服务应为 Up，mysql 有 (healthy)
 docker compose logs -f backend        # 另开一个窗口看启动，Ctrl+C 退出
@@ -254,7 +255,7 @@ ping chat.你的域名.com
 ### 2. 填域名并启用 Caddy
 
 ```bash
-cd /opt/outfit/outfit-chat
+cd /opt/outfit
 nano .env        # DOMAIN=chat.你的域名.com
 
 docker compose --profile https up -d
@@ -301,7 +302,7 @@ docker compose logs -f caddy     # 看证书申请过程
 ## 十一、日常运维
 
 ```bash
-cd /opt/outfit/outfit-chat
+cd /opt/outfit
 
 # 更新代码（改了 corpus 或代码后）
 git pull

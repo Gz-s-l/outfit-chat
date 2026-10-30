@@ -60,15 +60,15 @@ data:{"type": "error", "message": "..."}           ← 仅出错时
 
 ```bash
 # 1. 启动 FastAPI（模块一）
-cd D:\Vscode\rag\outfit-chat\ai-service
+cd D:\Vscode\outfit-chat\ai-service
 python -m uvicorn main:app --port 8000
 
-# 2. 编译 & 启动 SpringBoot（首次需 Maven，仓库根目录已带便携版）
-cd D:\Vscode\rag
-tools\apache-maven-3.9.9\bin\mvn -s tools\mvn-settings.xml -f outfit-chat\backend\pom.xml package -DskipTests
-java -jar outfit-chat\backend\target\chat-backend-1.0.0.jar --server.port=8080
+# 2. 编译 & 启动 SpringBoot（首次需 Maven，项目根目录已带便携版）
+cd D:\Vscode\outfit-chat
+tools\apache-maven-3.9.9\bin\mvn -s tools\mvn-settings.xml -f backend\pom.xml package -DskipTests
+java -jar backend\target\chat-backend-1.0.0.jar --server.port=8080
 
-# 3. 浏览器打开 outfit-chat\backend\dev_test_sse.html（默认已指向 8080），直接对话
+# 3. 浏览器打开 backend\dev_test_sse.html（默认已指向 8080），直接对话
 ```
 
 说明：
